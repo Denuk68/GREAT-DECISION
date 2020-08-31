@@ -21,7 +21,7 @@ pipeline  {
                     sh "docker rm `docker ps -a --no-trunc | grep $image_name | awk {'print \$1'}` || true"
                     sh "docker rmi $image_name || true"
                     sh "docker build -t $image_name ."
-                    sh "docker run -d --restart=always -p 8000:8000 $image_name"
+                    sh "docker run -d --restart=always -p 80:8000 $image_name"
 
                     // sh "docker stop"
                     // sh "docker run -d --restart=always pliuta/billing ."
@@ -32,7 +32,7 @@ pipeline  {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
                     docker login -u $USERNAME -p $PASSWORD
                     '''
